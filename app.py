@@ -19,7 +19,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv(
     "SECRET_KEY",
-    "smart_curriculum_secret_key"
+    "local-development-only-key"
 )
 
 
