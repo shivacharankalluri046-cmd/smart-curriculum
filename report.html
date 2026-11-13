@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Report - Smart Curriculum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .report-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .report-statistics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .report-statistics .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>Smart Curriculum</h1>
+    <p>Activity Report</p>
+</header>
+
+<main class="container">
+
+    <div class="no-print report-actions">
+        <a href="{{ url_for('home') }}">Back to Dashboard</a>
+
+        <button type="button" onclick="window.print()">
+            Download / Print PDF
+        </button>
+    </div>
+
+    <section class="panel">
+        <h2>My Learning Report</h2>
+
+        <div class="report-statistics">
+
+            <div class="card">
+                <h3>Total Activities</h3>
+                <p>{{ total }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Completed</h3>
+                <p>{{ completed }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Pending</h3>
+                <p>{{ pending }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Progress</h3>
+                <p>{{ progress }}%</p>
+            </div>
+
+        </div>
+
+        <h2>Activity Details</h2>
+
+        {% if activities %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.title }}</td>
+                    <td>{{ activity.subject_name or 'N/A' }}</td>
+                    <td>{{ activity.due_date or 'Not Set' }}</td>
+                    <td>{{ activity.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+
+        <p>No activities to report yet.</p>
+
+        {% endif %}
+
+    </section>
+</main>
+
+</body>
+</html>

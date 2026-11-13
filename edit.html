@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Activity - Smart Curriculum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="header">
+        <h1>Smart Curriculum</h1>
+        <p>Edit Activity</p>
+    </header>
+
+    <main class="container">
+        <section class="panel">
+            <h2>Update Activity</h2>
+
+            <form action="{{ url_for('edit_activity', id=activity.id) }}" method="POST">
+
+                <label for="title">Activity Title</label>
+                <input id="title" name="title" type="text"
+                       value="{{ activity.title }}" required>
+
+                <label for="subject">Subject</label>
+                <input id="subject" name="subject" type="text"
+                       value="{{ activity.subject }}" required>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required>{{ activity.description }}</textarea>
+
+                <label for="deadline">Deadline</label>
+                <input id="deadline" name="deadline" type="date"
+                       value="{{ activity.due_date or '' }}">
+
+                <button type="submit">Save Changes</button>
+
+                <a href="{{ url_for('home') }}">Cancel</a>
+
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>Smart Curriculum Activity Management Application</p>
+        <p>Academic Project Prototype</p>
+    </footer>
+
+</body>
+</html>

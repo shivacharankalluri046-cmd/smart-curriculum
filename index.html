@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Curriculum Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Smart Curriculum Activity Management</h1>
+    <p>Welcome, {{ session.get('user_name', 'Student') }}!</p>
+    <a href="{{ url_for('profile') }}">My Profile</a> |
+    <a href="{{ url_for('report') }}">My Reports</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+</header>
+
+<main>
+    <h2>Dashboard</h2>
+
+    <section class="stats">
+        <p>Total Activities: {{ total_activities }}</p>
+        <p>Completed: {{ completed_activities }}</p>
+        <p>Pending: {{ pending_activities }}</p>
+        <p>Overdue: {{ overdue_activities }}</p>
+        <p>Due Today: {{ due_today }}</p>
+        <p>Upcoming: {{ upcoming_activities }}</p>
+        <p>Progress: {{ progress }}%</p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p class="flash-message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <h2>Add New Activity</h2>
+
+    <form action="{{ url_for('add_activity') }}" method="POST">
+        <input type="text" name="title" placeholder="Activity Title" required>
+        <input type="text" name="subject" placeholder="Subject" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <input type="date" name="deadline">
+        <button type="submit">Add Activity</button>
+    </form>
+
+    <h2>Curriculum Activities</h2>
+
+    {% for activity in activities %}
+        <div class="activity-card">
+            <h3>{{ activity.title }}</h3>
+            <p>Subject: {{ activity.subject_name or 'N/A' }}</p>
+            <p>Description: {{ activity.description or 'N/A' }}</p>
+            <p>Deadline: {{ activity.due_date or 'Not set' }}</p>
+            <p>Status: {{ activity.status }}</p>
+
+            <a href="{{ url_for('edit_activity', id=activity.id) }}">Edit</a>
+
+            {% if activity.status != 'Completed' %}
+                <form action="{{ url_for('complete_activity', id=activity.id) }}" method="POST">
+                    <button type="submit">Mark as Completed</button>
+                </form>
+            {% endif %}
+
+            <form action="{{ url_for('delete_activity', id=activity.id) }}" method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete this activity?')">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    {% else %}
+        <p>No activities found. Add your first activity!</p>
+    {% endfor %}
+</main>
+
+</body>
+</html>
